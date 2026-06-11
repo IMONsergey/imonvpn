@@ -1,0 +1,1 @@
+vless://c6ecad23-8098-4107-a1cc-698dc2747551@13.140.29.192:2053?type=tcp&security=reality&sni=support.apple.com&fp=chrome&pbk=18v5wyhLfN0F4DPllINqZWfdW_clrJyX5mFmTE4RSlg&sid=3ff8442e&flow=&encryption=none#imonvpn-main-backup
