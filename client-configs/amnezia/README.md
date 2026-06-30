@@ -33,6 +33,31 @@
 - [awg/guest09.conf](./awg/guest09.conf)
 - [awg/guest10.conf](./awg/guest10.conf)
 
+## Важно для Amnezia-клиента
+
+Для `AmneziaVPN` сырой сторонний `AWG .conf` может импортироваться неидеально:
+
+- файл читается
+- но во внутреннем клиентском объекте может потеряться флаг `isObfuscationEnabled`
+
+Тогда приложение пытается поднять почти обычный `WireGuard`, а сервер ждёт именно `AmneziaWG`.
+
+Практически это выглядит так:
+
+- в приложении есть профиль
+- но на сервер вообще не приходит новый `handshake`
+
+Поэтому для `AmneziaVPN` лучше использовать не только `.conf`, но и **родной app-import формат**:
+
+- [app-import/amnezia-main-awg.json](./app-import/amnezia-main-awg.json)
+- [app-import/amnezia-main-awg.vpn](./app-import/amnezia-main-awg.vpn)
+
+Этот пакет уже содержит:
+
+- `protocol_version = 2`
+- `isObfuscationEnabled = true`
+- все `J*`, `S*`, `H*`, `I1` поля в том виде, который ожидает клиент
+
 ## Важные практические детали
 
 - Эти конфиги сделаны **IPv4-only**:

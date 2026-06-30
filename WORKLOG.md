@@ -157,3 +157,15 @@
   - `client-configs/amnezia/awg/guest08.conf`
   - `client-configs/amnezia/awg/guest09.conf`
   - `client-configs/amnezia/awg/guest10.conf`
+
+### Дополнительная находка по клиентам Amnezia
+
+- В коде клиента `AmneziaVPN` и на `iOS`, и на `Android` включение AWG-обфускации завязано на флаг `isObfuscationEnabled`.
+- Для стороннего сырого `.conf` этот флаг не всегда гарантированно доживает до внутреннего клиентского объекта.
+- Следствие:
+  - профиль импортирован
+  - но клиент может пытаться стартовать не как `AmneziaWG`, а почти как обычный `WireGuard`
+  - на сервер в этот момент не приходит ожидаемый новый `handshake`
+- Поэтому рядом добавлен более нативный для клиента импорт-пакет:
+  - `client-configs/amnezia/app-import/amnezia-main-awg.json`
+  - `client-configs/amnezia/app-import/amnezia-main-awg.vpn`
