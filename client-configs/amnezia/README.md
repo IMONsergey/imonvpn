@@ -29,3 +29,14 @@
 - `guest01.conf`
 - `guest02.conf`
 - и т.д.
+
+## Что есть уже сейчас
+
+Пока нативный `AmneziaWG 2.0` ещё не поднят, рядом подготовлены **Xray Reality JSON**-файлы для импорта именно в `AmneziaVPN`:
+
+- [xray-json/amnezia-main-primary.json](./xray-json/amnezia-main-primary.json)
+- [xray-json/amnezia-main-backup.json](./xray-json/amnezia-main-backup.json)
+- [xray-json/amnezia-tv-primary.json](./xray-json/amnezia-tv-primary.json)
+- [xray-json/amnezia-tv-backup.json](./xray-json/amnezia-tv-backup.json)
+
+Это не `.conf`, а промежуточный способ завести `AmneziaVPN` на текущем сервере без перестройки прод-стека.
