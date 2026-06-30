@@ -1,42 +1,64 @@
 # Amnezia Native Configs
 
-Эта папка зарезервирована под **нативные конфиги AmneziaWG / WireGuard**.
+Здесь лежат **нативные `AmneziaWG`-конфиги** для приложения `AmneziaVPN`.
 
-## Важно
+## Что изменилось
 
-Нативный `AmneziaWG` использует не `vless://...` ссылки, а конфигурационные файлы формата `.conf`.
+Раньше в проекте были только:
 
-По официальной документации Amnezia:
+- `vless://...` ссылки
+- `.json` файлы импорта `Xray Reality`
 
-- `.conf` — это нативный формат WireGuard/AmneziaWG
-- `AmneziaVPN` также умеет импортировать `vless://...` и `.json`, но это уже сценарий `Xray`, а не нативный `AmneziaWG`
+Это помогало тестировать `AmneziaVPN` как Xray-клиент, но это **не** был нативный `AmneziaWG`.
 
-## Почему здесь пока нет `.conf`
+Теперь на сервере поднят отдельный контейнер:
 
-Чтобы получить настоящие `AmneziaWG`-конфиги, сначала нужно:
+- `amnezia-awg2`
+- `UDP 443`
+- сервер: `13.140.29.192`
 
-1. установить `AmneziaWG 2.0` на сервер
-2. создать подключения через `AmneziaVPN`
-3. экспортировать native-конфиги `.conf`
+И рядом появился отдельный набор настоящих `.conf` файлов.
 
-То есть текущие выданные ранее ключи для `AmneziaVPN` — это **Xray Reality для импорта в AmneziaVPN**, а не AmneziaWG-конфиги.
+## Где конфиги
 
-## Следующий шаг
+- [awg/main.conf](./awg/main.conf)
+- [awg/guest01.conf](./awg/guest01.conf)
+- [awg/guest02.conf](./awg/guest02.conf)
+- [awg/guest03.conf](./awg/guest03.conf)
+- [awg/guest04.conf](./awg/guest04.conf)
+- [awg/guest05.conf](./awg/guest05.conf)
+- [awg/guest06.conf](./awg/guest06.conf)
+- [awg/guest07.conf](./awg/guest07.conf)
+- [awg/guest08.conf](./awg/guest08.conf)
+- [awg/guest09.conf](./awg/guest09.conf)
+- [awg/guest10.conf](./awg/guest10.conf)
 
-Когда `AmneziaWG 2.0` будет установлен, в эту папку кладём:
+## Важные практические детали
 
-- `main.conf`
-- `guest01.conf`
-- `guest02.conf`
-- и т.д.
+- Эти конфиги сделаны **IPv4-only**:
+  - `AllowedIPs = 0.0.0.0/0`
+  - без `::/0`
+- Это сделано специально, чтобы убрать сценарий `сеть есть, но клиент умирает на IPv6-маршруте`, пока на текущем single-VPS не введён полноценный IPv6-through-tunnel.
+- Для `AmneziaVPN` импортируем именно **файл `.conf`**, а не ссылку.
 
-## Что есть уже сейчас
+## Почему раньше Amnezia могла показывать "сети нет"
 
-Пока нативный `AmneziaWG 2.0` ещё не поднят, рядом подготовлены **Xray Reality JSON**-файлы для импорта именно в `AmneziaVPN`:
+Корней оказалось несколько:
+
+1. На сервере долгое время вообще не было установленного нативного `AmneziaWG`.
+2. Старый `x-ui` конфликтовал со standalone `xray-reality` на тех же портах.
+3. После первого поднятия `AWG` контейнер стартовал с шаблонным `start.sh`, где не были подставлены значения подсети, из-за чего не создавался NAT.
+4. В клиентских `.conf` пустые строки `I2-I5` и маршрут `::/0` мешали стабильному self-test сценарию.
+
+Все четыре пункта теперь исправлены.
+
+## Что оставлено как fallback
+
+Если нужно проверить старый Xray-сценарий через `AmneziaVPN`, рядом всё ещё лежат:
 
 - [xray-json/amnezia-main-primary.json](./xray-json/amnezia-main-primary.json)
 - [xray-json/amnezia-main-backup.json](./xray-json/amnezia-main-backup.json)
 - [xray-json/amnezia-tv-primary.json](./xray-json/amnezia-tv-primary.json)
 - [xray-json/amnezia-tv-backup.json](./xray-json/amnezia-tv-backup.json)
 
-Это не `.conf`, а промежуточный способ завести `AmneziaVPN` на текущем сервере без перестройки прод-стека.
+Но рабочий нативный путь для `AmneziaVPN` теперь именно папка `awg/`.
