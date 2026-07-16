@@ -229,3 +229,26 @@
   - VPS всё ещё `Disabled`
   - просьба вручную unsuspend/re-enable VPS.
 - Статус тикета после ответа: `Customer-Reply`.
+
+### Восстановление после unsuspend
+
+- AlphaVPS ответили в тикете `#206441`, что сервер unsuspended.
+- В тот же тикет отправлен дополнительный запрос без повторного приветствия:
+  - добавить ещё `+1 TB/month` permanent bandwidth
+  - итоговый желаемый лимит addon: `+2 TB/month`
+  - стоимость по ответу AlphaVPS: `2 EUR/month` за `1 TB`, то есть `4 EUR/month` за `2 TB`
+  - попросили выставить дополнительный invoice при необходимости
+- На странице сервиса VPS снова `Online`.
+- Bandwidth на странице сервиса: `3.06 TB of 4 TB`, `76%`.
+- SSH снова доступен.
+- Проверено на сервере:
+  - `xray-reality` active
+  - `nginx` active
+  - `docker` active
+  - `fail2ban` active
+  - `amnezia-awg2` running, `UDP 443`
+  - `xray` listening on `TCP 443`, `8443`, `2053`
+  - `AmneziaWG` interface `awg0` up
+  - NAT для `10.8.1.0/24` присутствует
+- `AmneziaWG` показал свежий handshake для основного клиента `10.8.1.10/32` и трафик.
+- Пользователь подтвердил: VPN заработал.
