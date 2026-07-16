@@ -82,6 +82,10 @@ AlphaVPS ответили в тикете `#206441`: suspension автомати
 - permanent bandwidth upgrade `+1 TB/month`
 - стоимость `2 EUR/month` к ежемесячному платежу
 - запрос отправлен в тикет `#206441`
+- invoice от AlphaVPS оплачен
+- recurring amount сервиса изменился с `$3.59USD` на `$5.89USD`
+- после оплаты VPS всё ещё `Disabled`, `Boot` всё ещё возвращает `Virtual server suspended`
+- в тикет `#206441` отправлен ответ с просьбой вручную unsuspend/re-enable VPS
 - текущий статус тикета после ответа: `Customer-Reply`
 
 До снятия suspension на стороне провайдера нельзя объективно отлаживать `AmneziaWG`, `Xray Reality`, `iptables` или клиентские конфиги: серверная VM не запускается штатно.
@@ -90,7 +94,7 @@ AlphaVPS ответили в тикете `#206441`: suspension автомати
 
 Следующий шаг проекта на этой фазе теперь такой:
 
-1. Дождаться применения permanent bandwidth upgrade или выставленного счёта от AlphaVPS
+1. Дождаться ручного unsuspend/re-enable от AlphaVPS после оплаты bandwidth invoice
 2. После включения VPS проверить `ssh`, `xray-reality`, `nginx`, `docker`, `amnezia-awg2`, `iptables`
 3. Проверить подключение `Hiddify` и `AmneziaVPN` с клиентских устройств
 4. После восстановления раздать готовые `.conf` по устройствам через `AmneziaVPN`

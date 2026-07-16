@@ -215,3 +215,17 @@
   - применить к `C2G - imonvpn-01`, service id `48528`, IP `13.140.29.192`
   - после применения re-enable/unsuspend VPS
 - После отправки статус тикета изменился на `Customer-Reply`.
+
+### Оплата bandwidth upgrade
+
+- AlphaVPS ответили, что invoice для permanent bandwidth upgrade создан.
+- Пользователь оплатил invoice.
+- На странице сервиса recurring amount изменился с `$3.59USD` на `$5.89USD`, что подтверждает применение постоянного addon на стороне биллинга.
+- После оплаты VPS всё ещё отображался как `Disabled`.
+- Повторный `Boot` по-прежнему возвращал `Virtual server suspended`.
+- В тикет `#206441` отправлен ответ:
+  - invoice paid
+  - recurring amount уже `$5.89USD/month`
+  - VPS всё ещё `Disabled`
+  - просьба вручную unsuspend/re-enable VPS.
+- Статус тикета после ответа: `Customer-Reply`.
