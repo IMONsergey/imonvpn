@@ -2,6 +2,10 @@
 .env
 *.secrets
 *-credentials.txt
+client-configs/amnezia/awg/*.conf
+client-configs/amnezia/app-import/*.json
+client-configs/amnezia/app-import/*.vpn
+client-configs/amnezia/app-import/links.txt
 
 # Python
 __pycache__/

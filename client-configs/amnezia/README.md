@@ -1,25 +1,22 @@
 # Amnezia Native Configs
 
-Здесь лежат **нативные `AmneziaWG`-конфиги** для приложения `AmneziaVPN`.
+Здесь локально лежат активные клиентские профили для нового clean-сервера `imonvpn-02`.
 
-## Что изменилось
+Важно: репозиторий `IMONsergey/imonvpn` публичный, поэтому реальные `.conf`, `.vpn` и `.json` профили с приватными клиентскими ключами не должны попадать в git. Они остаются в этой папке на рабочей машине и выдаются вручную владельцу устройств.
 
-Раньше в проекте были только:
+## Текущий сервер
 
-- `vless://...` ссылки
-- `.json` файлы импорта `Xray Reality`
+- Провайдер: `AlphaVPS`
+- Service id: `50871`
+- Hostname: `imonvpn-02`
+- Локация: `Nuremberg, DE`
+- IPv4 endpoint: `83.171.203.63:443/udp`
+- Протокол: `AmneziaWG 2.0`
+- Серверная подсеть: `10.9.1.0/24`
 
-Это помогало тестировать `AmneziaVPN` как Xray-клиент, но это **не** был нативный `AmneziaWG`.
+## Где брать профили
 
-Теперь на сервере поднят отдельный контейнер:
-
-- `amnezia-awg2`
-- `UDP 443`
-- сервер: `13.140.29.192`
-
-И рядом появился отдельный набор настоящих `.conf` файлов.
-
-## Где конфиги
+Нативные `.conf` для Android TV и ручного импорта создаются локально:
 
 - [awg/main.conf](./awg/main.conf)
 - [awg/guest01.conf](./awg/guest01.conf)
@@ -33,57 +30,47 @@
 - [awg/guest09.conf](./awg/guest09.conf)
 - [awg/guest10.conf](./awg/guest10.conf)
 
-## Важно для Amnezia-клиента
+App-import файлы для AmneziaVPN создаются локально:
 
-Для `AmneziaVPN` сырой сторонний `AWG .conf` может импортироваться неидеально:
-
-- файл читается
-- но во внутреннем клиентском объекте может потеряться флаг `isObfuscationEnabled`
-
-Тогда приложение пытается поднять почти обычный `WireGuard`, а сервер ждёт именно `AmneziaWG`.
-
-Практически это выглядит так:
-
-- в приложении есть профиль
-- но на сервер вообще не приходит новый `handshake`
-
-Поэтому для `AmneziaVPN` лучше использовать не только `.conf`, но и **родной app-import формат**:
-
-- [app-import/amnezia-main-awg.json](./app-import/amnezia-main-awg.json)
 - [app-import/amnezia-main-awg.vpn](./app-import/amnezia-main-awg.vpn)
+- [app-import/amnezia-guest01-awg.vpn](./app-import/amnezia-guest01-awg.vpn)
+- [app-import/amnezia-guest02-awg.vpn](./app-import/amnezia-guest02-awg.vpn)
+- [app-import/amnezia-guest03-awg.vpn](./app-import/amnezia-guest03-awg.vpn)
+- [app-import/amnezia-guest04-awg.vpn](./app-import/amnezia-guest04-awg.vpn)
+- [app-import/amnezia-guest05-awg.vpn](./app-import/amnezia-guest05-awg.vpn)
+- [app-import/amnezia-guest06-awg.vpn](./app-import/amnezia-guest06-awg.vpn)
+- [app-import/amnezia-guest07-awg.vpn](./app-import/amnezia-guest07-awg.vpn)
+- [app-import/amnezia-guest08-awg.vpn](./app-import/amnezia-guest08-awg.vpn)
+- [app-import/amnezia-guest09-awg.vpn](./app-import/amnezia-guest09-awg.vpn)
+- [app-import/amnezia-guest10-awg.vpn](./app-import/amnezia-guest10-awg.vpn)
 
-Этот пакет уже содержит:
+## Что отключено
 
-- `protocol_version = 2`
-- `isObfuscationEnabled = true`
-- все `J*`, `S*`, `H*`, `I1` поля в том виде, который ожидает клиент
+В активной схеме больше нет `Xray Reality` импортов для Amnezia. Причина: на старом сервере именно TCP/Xray-плоскость создала неконтролируемый расход bandwidth. На новом сервере публично оставлены только:
 
-## Важные практические детали
+- `22/tcp` для SSH по ключу
+- `443/udp` для AmneziaWG
 
-- Эти конфиги сделаны **IPv4-only**:
-  - `AllowedIPs = 0.0.0.0/0`
-  - без `::/0`
-- Это сделано специально, чтобы убрать сценарий `сеть есть, но клиент умирает на IPv6-маршруте`, пока на текущем single-VPS не введён полноценный IPv6-through-tunnel.
-- Для `AmneziaVPN` импортируем именно **файл `.conf`**, а не ссылку.
+`443/tcp`, `8443/tcp`, `2053/tcp`, `80/tcp` должны оставаться закрытыми.
 
-## Почему раньше Amnezia могла показывать "сети нет"
+## Учёт трафика
 
-Корней оказалось несколько:
+Каждый профиль имеет отдельный peer и отдельный IP:
 
-1. На сервере долгое время вообще не было установленного нативного `AmneziaWG`.
-2. Старый `x-ui` конфликтовал со standalone `xray-reality` на тех же портах.
-3. После первого поднятия `AWG` контейнер стартовал с шаблонным `start.sh`, где не были подставлены значения подсети, из-за чего не создавался NAT.
-4. В клиентских `.conf` пустые строки `I2-I5` и маршрут `::/0` мешали стабильному self-test сценарию.
+- `main`: `10.9.1.10/32`
+- `guest01`: `10.9.1.11/32`
+- `guest02`: `10.9.1.12/32`
+- `guest03`: `10.9.1.13/32`
+- `guest04`: `10.9.1.14/32`
+- `guest05`: `10.9.1.15/32`
+- `guest06`: `10.9.1.16/32`
+- `guest07`: `10.9.1.17/32`
+- `guest08`: `10.9.1.18/32`
+- `guest09`: `10.9.1.19/32`
+- `guest10`: `10.9.1.20/32`
 
-Все четыре пункта теперь исправлены.
+На сервере работает таймер `imonvpn-awg-traffic.timer`. Отчёт:
 
-## Что оставлено как fallback
-
-Если нужно проверить старый Xray-сценарий через `AmneziaVPN`, рядом всё ещё лежат:
-
-- [xray-json/amnezia-main-primary.json](./xray-json/amnezia-main-primary.json)
-- [xray-json/amnezia-main-backup.json](./xray-json/amnezia-main-backup.json)
-- [xray-json/amnezia-tv-primary.json](./xray-json/amnezia-tv-primary.json)
-- [xray-json/amnezia-tv-backup.json](./xray-json/amnezia-tv-backup.json)
-
-Но рабочий нативный путь для `AmneziaVPN` теперь именно папка `awg/`.
+```bash
+/usr/local/sbin/imonvpn-awg-report --report-only
+```

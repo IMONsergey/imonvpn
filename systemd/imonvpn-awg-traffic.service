@@ -1,0 +1,8 @@
+[Unit]
+Description=Collect imonvpn AmneziaWG per-peer traffic counters
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/imonvpn-awg-traffic-accounting.py

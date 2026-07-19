@@ -1,6 +1,6 @@
 # Документация VPN-инфраструктуры
 
-Полная документация личного VPN на базе VLESS Reality + Cloudflare CDN.
+Полная документация личного VPN. Текущая production-фаза использует clean `AmneziaWG 2.0` сервер без Xray fallback.
 
 ## Содержание
 
@@ -16,6 +16,9 @@
 | 8 | [Обслуживание](08-operations.md) | Мониторинг, troubleshooting, disaster recovery |
 | 9 | [Статус](09-status.md) | Текущий статус проекта, бюджет, источники |
 | 10 | [VPN на роутере](10-router-setup.md) | Keenetic (XKeen), OpenWrt (PassWall2), ASUS Merlin (XrayUI) |
+| 11 | [Живое состояние деплоя](11-live-deployment.md) | Фактическая конфигурация нового clean-сервера |
+| 13 | [Текущая фаза](13-current-phase.md) | AmneziaWG-only решение после bandwidth-инцидента |
+| 14 | [Clean AmneziaWG Runbook](14-clean-amneziawg-runbook.md) | Команды восстановления, проверки и ротации |
 
 ## Связанная документация
 

@@ -5,14 +5,18 @@
 Этот репозиторий `IMONsergey/imonvpn` используется как **собственная рабочая копия** проекта с фокусом на ваш сценарий:
 
 - сначала поднимаем **минимально рабочий VPN на одном EU VPS**
-- основной клиентский путь делаем через **AmneziaVPN + XRay VLESS Reality**
+- текущий основной клиентский путь: **AmneziaVPN + AmneziaWG 2.0**
+- текущий сервер `imonvpn-02`: `83.171.203.63:443/udp`
+- Xray fallback на голом IP сейчас отключён, чтобы не повторять bandwidth-инцидент
 - все договорённости, входные данные и изменения фиксируем прямо в этом репозитории
 
 С чего начинать:
 
 - [NEXT_STEPS.md](NEXT_STEPS.md) — что сейчас нужно от вас
 - [WORKLOG.md](WORKLOG.md) — журнал решений и прогресса
-- [docs/AMNEZIA_PLAN.md](docs/AMNEZIA_PLAN.md) — как именно идём к совместимости с Amnezia
+- [docs/11-live-deployment.md](docs/11-live-deployment.md) — текущее живое состояние сервера
+- [docs/13-current-phase.md](docs/13-current-phase.md) — текущая фаза и принятые решения
+- [client-configs/amnezia/README.md](client-configs/amnezia/README.md) — активные AmneziaWG-профили
 
 Техническая база ниже пока сохранена из исходного проекта, чтобы мы могли переиспользовать его скрипты и документацию.
 

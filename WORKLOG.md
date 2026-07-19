@@ -263,3 +263,56 @@
 - После оплаты recurring amount на странице сервиса изменился до `$8.19USD`.
 - Bandwidth UI пока показывает `3.12 TB of 4 TB`, `78%`, то есть второй `+1 TB/month` ещё не отражён в лимите как `5 TB`.
 - Статус тикета после ответа: `Customer-Reply`.
+
+## 2026-07-19
+
+### Новый clean-сервер вместо старого bandwidth/Xray-инцидента
+
+- Куплен новый AlphaVPS `C4G` в `Nuremberg, DE`.
+- Новый service id: `50871`.
+- Hostname: `imonvpn-02`.
+- IPv4: `83.171.203.63`.
+- IPv6: `2602:fc16:2:515::e8da`.
+- ОС: `Debian 12 (bookworm)`.
+- Тариф: `4 GB RAM`, `40 GB NVMe`, `5 TB bandwidth`.
+
+### Принятое решение
+
+- Старый подход `AmneziaWG + Xray fallback на голом IP` больше не используем.
+- Причина: на старом VPS высокий расход bandwidth был связан с открытой TCP/Xray-плоскостью.
+- Новый сервер поднят как `AmneziaWG-only`.
+- Публично оставлены только:
+  - `22/tcp` для SSH по ключу
+  - `443/udp` для AmneziaWG
+- `80/tcp`, `443/tcp`, `8443/tcp`, `2053/tcp` закрыты.
+
+### Что настроено
+
+- Docker-контейнер `amnezia-awg2` на образе `amneziavpn/amneziawg-go:2.0.0`.
+- Endpoint: `83.171.203.63:443/udp`.
+- Subnet: `10.9.1.0/24`.
+- Выпущены новые профили:
+  - `main`
+  - `guest01` ... `guest10`
+- Клиентские `.conf` и `.vpn` app-import файлы обновлены в `client-configs/amnezia/`.
+- Серверный приватный ключ не записан в git; он находится только на VPS в `/opt/amnezia/awg/awg0.conf`.
+- Так как `IMONsergey/imonvpn` публичный, реальные клиентские `.conf/.vpn/.json` оставлены локально и добавлены в `.gitignore`.
+- Добавлен генератор профилей `scripts/generate-amneziawg-profiles.py`.
+- Добавлен bootstrap `scripts/setup-clean-amneziawg-server.sh`.
+- `nftables` настроен как persistent firewall и NAT.
+- SSH переведён на ключи, password-login отключён.
+- `fail2ban` включён для `sshd` через `backend = systemd`.
+- `vnstat` включён для общего учёта трафика.
+- `imonvpn-awg-traffic.timer` включён для per-peer учёта AWG.
+
+### Проверки
+
+- `amnezia-awg2` слушает `UDP/443`.
+- `TCP/443`, `TCP/8443`, `TCP/2053`, `TCP/80` снаружи не подключаются.
+- После reboot поднялись `docker`, `nftables`, `fail2ban`, `vnstat`, `imonvpn-awg-traffic.timer`.
+- После reboot контейнер `amnezia-awg2` поднялся автоматически.
+- Self-test через временный AWG-клиент на `guest10`:
+  - сделал handshake
+  - успешно пингует `1.1.1.1`
+  - открывает `https://api.telegram.org`
+- Per-peer accounting зафиксировал тестовый расход на `guest10`.
