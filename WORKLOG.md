@@ -316,3 +316,29 @@
   - успешно пингует `1.1.1.1`
   - открывает `https://api.telegram.org`
 - Per-peer accounting зафиксировал тестовый расход на `guest10`.
+
+## 2026-07-20
+
+### Отмена старого AlphaVPS сервера
+
+- Принято решение оставить только новый clean-сервер:
+  - `imonvpn-02`
+  - service id `50871`
+  - IP `83.171.203.63`
+  - протокол `AmneziaWG 2.0`
+- Старый сервер больше не нужен:
+  - `imonvpn-01`
+  - service id `48528`
+  - IP `13.140.29.192`
+  - тариф `C2G`
+- В AlphaVPS открыта форма `Request Cancellation` именно для старого сервиса `48528`.
+- Отправлен cancellation request с типом `Immediate`.
+- Причина в форме: `No longer needed: migrated to new imonvpn-02 server.`
+- AlphaVPS показали подтверждение: `Thank You. Your cancellation request has been submitted.`
+- После отправки список услуг всё ещё показывал старый сервис как `Active`; это зафиксировано как pending/provider-side processing state.
+- Новый сервер `imonvpn-02` после cancellation request проверен по SSH:
+  - `docker` active
+  - `nftables` active
+  - `fail2ban` active
+  - `imonvpn-awg-traffic.timer` active
+  - контейнер `amnezia-awg2` running
